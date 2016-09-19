@@ -36,6 +36,10 @@ class Validation
       @value = value
     end
 
+    def fold(if_failure, if_success)
+      if_success.call(@value)
+    end
+
     def is_success?
       true
     end
@@ -44,6 +48,10 @@ class Validation
   class Failure < Validation
     def initialize(errors)
       @errors = errors
+    end
+
+    def fold(if_failure, if_success)
+      if_failure.call(@errors.to_a)
     end
 
     def is_success?
@@ -103,14 +111,14 @@ class Validation
   #
   # Otherwise, return this Validation.
   def map(&if_success)
-    raise "not implemented"
+    fold(lambda { |errors| self }, lambda { |value| Validation.success(if_success.call(value)) })
   end
 
   # If this Validation represents success, apply the given block to the success value and return the resulting value, which should be a Validation.
   #
   # Otherwise, return this Validation.
   def flat_map(&if_success)
-    raise "not implemented"
+    fold(lambda { |errors| self }, lambda { |value| if_success.call(value) })
   end
 
   # If this Validation and the given applicable_validation both represent success, apply the function contained by
