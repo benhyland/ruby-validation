@@ -126,7 +126,16 @@ class Validation
   #
   # Otherwise, return a failure Validation containing all errors from this Validation and from the given applicable_validation.
   def apply(applicable_validation)
-    raise "not implemented"
+    fold(
+      lambda { |self_errors| applicable_validation.fold(
+        lambda { |other_errors| errs = self_errors + other_errors; Validation.failure(errs[0], *errs[1..-1]) },
+        lambda { |if_success| self }
+      )},
+      lambda { |value| applicable_validation.fold(
+        lambda { |errors| applicable_validation },
+        lambda { |if_success| Validation.success(if_success.call(value)) }
+      )}
+    )
   end
 
   # If the given NonEmptyList of Validations all represent success, then return a single successful Validation containing
@@ -134,7 +143,20 @@ class Validation
   #
   # Otherwise, return a single failure Validation containing all the available error values.
   def self.sequence(validations_nel)
-    raise "not implemented"
+    errors = []
+    values = []
+    validations_nel.each do |validation|
+      validation.fold(
+        lambda { |es| errors = errors + es },
+        lambda { |v| values << v },
+      )
+    end
+
+    if errors.empty?
+      Validation.success(values)
+    else
+      Validation.failure(errors[0], *errors[1..-1])
+    end
   end
 
   # If the given NonEmptyList of Validations all represent success, then return a single successful Validation containing
@@ -142,7 +164,7 @@ class Validation
   #
   # Otherwise, return a single failure Validation containing all the available error values.
   def self.traverse(validations_nel, &block)
-    raise "not implemented"
+    Validation.sequence(validations_nel).map { |values| values.collect &block }
   end
 
   # If the given NonEmptyList of Validations all represent success, then provide all the success values, in order,
@@ -150,6 +172,6 @@ class Validation
   #
   # Otherwise, return a failure Validation containing all the available error values.
   def self.mapN(validations_nel, &block)
-    raise "not implemented"
+    Validation.sequence(validations_nel).map { |values| block.call(*values) }
   end
 end
