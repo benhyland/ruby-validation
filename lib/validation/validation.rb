@@ -20,12 +20,35 @@ class Validation
 
   # Create a Validation instance representing a successful value.
   def self.success(value)
-    raise "not implemented"
+    Success.new(value)
   end
 
   # Create a Validation instance representing at least one error value.
   def self.failure(error, *other_errors)
-    raise "not implemented"
+    Failure.new(NonEmptyList.new(error, *other_errors))
+  end
+
+  class Success < Validation
+    def initialize(value)
+      if value == nil
+        raise "Success cannot contain nil"
+      end
+      @value = value
+    end
+
+    def is_success?
+      true
+    end
+  end
+
+  class Failure < Validation
+    def initialize(errors)
+      @errors = errors
+    end
+
+    def is_success?
+      false
+    end
   end
 
   #
@@ -39,17 +62,17 @@ class Validation
 
   # Return true if this Validation represents failure, false otherwise.
   def is_failure?
-    raise "not implemented"
+    !is_success?
   end
 
   # Return the success value if this Validation represents success, or call the given function to provide a default otherwise.
   def get_or_else(lazy_default_value)
-    raise "not implemented"
+    is_success? ? @value : lazy_default_value.call
   end
 
   # Return this Validation if it represents success, or call the given function to provide a default Validation otherwise.
   def or_else(lazy_default_validation)
-    raise "not implemented"
+    is_success? ? self : lazy_default_validation.call
   end
 
   # Fold is a function used to transform data structures.
