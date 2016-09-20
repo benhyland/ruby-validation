@@ -143,20 +143,9 @@ class Validation
   #
   # Otherwise, return a single failure Validation containing all the available error values.
   def self.sequence(validations_nel)
-    errors = []
-    values = []
-    validations_nel.each do |validation|
-      validation.fold(
-        lambda { |es| errors = errors + es },
-        lambda { |v| values << v },
-      )
-    end
-
-    if errors.empty?
-      Validation.success(values)
-    else
-      Validation.failure(errors[0], *errors[1..-1])
-    end
+    validations_nel.tail.reduce(validations_nel.head.map { |value| NonEmptyList.new(value) }) do |result, validation|
+      result.apply(validation.map { |value| lambda { |result_values| result_values.append(value) } })
+    end.map { |nel| nel.to_a }
   end
 
   # If the given NonEmptyList of Validations all represent success, then return a single successful Validation containing
