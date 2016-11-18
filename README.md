@@ -13,11 +13,10 @@ The main code is under `lib`, while tests are under `spec`.
 
 You can run the tests with `bundle exec rspec`.
 
-Implement the missing pieces of `validation.rb` and `non_empty_list.rb` to make the tests pass.
+Implement the missing pieces of `validation.rb` to make the tests pass.
 
 It is probably best to address the tests in the order they appear in each suite and to take the suites in the following order:
 
-- nel_spec
 - validation_structure_spec
 - validation_transformation_spec
 - validation_applicative_spec
