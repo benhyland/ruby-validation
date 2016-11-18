@@ -18,9 +18,9 @@ class NonEmptyList
     @values[1..-1]
   end
 
-  # Returns a new NonEmptyList that contains all the elements of this instance, with the given element appended.
-  def append(element)
-    NonEmptyList.new(head, *(tail << element))
+  # Returns an array containing all the elements of this NonEmptyList in order.
+  def to_a
+    [head] + tail
   end
 
   # Returns a new NonEmptyList that contains all the elements of this instance, with the given element prepended.
@@ -28,9 +28,9 @@ class NonEmptyList
     NonEmptyList.new(element, *to_a)
   end
 
-  # Returns a new NonEmptyList that contains all the elements of this instance, with all the given elements appended in the given order.
-  def append_all(*elements)
-    NonEmptyList.new(head, *(tail + elements))
+  # Returns a new NonEmptyList that contains all the elements of this instance, with the given element appended.
+  def append(element)
+    NonEmptyList.new(head, *(tail << element))
   end
 
   # Returns a new NonEmptyList that contains all the elements of this instance, with all the given elements prepended in the given order.
@@ -39,8 +39,8 @@ class NonEmptyList
     NonEmptyList.new(new_values[0], *(new_values[1..-1]))
   end
 
-  # Returns an array containing all the elements of this NonEmptyList in order.
-  def to_a
-    [head] + tail
+  # Returns a new NonEmptyList that contains all the elements of this instance, with all the given elements appended in the given order.
+  def append_all(*elements)
+    NonEmptyList.new(head, *(tail + elements))
   end
 end
