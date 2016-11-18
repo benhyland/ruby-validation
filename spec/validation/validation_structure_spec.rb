@@ -2,27 +2,27 @@ require 'nel/non_empty_list'
 require 'validation/validation'
 
 RSpec.describe Validation do
-  it "should hint that it shouldn't be extended" do
-    expect { Validation.new }.to raise_error RuntimeError
+  it "should hint to the user that it shouldn't be extended" do
+    expect { Validation.new }.to raise_error "You can't instantiate Validation directly, use `success()` or `failure()` instead. Please don't modify or extend Validation yourself."
   end
 
-  it "should provide a factory method for success values" do
-    v = Validation.success("yay")
+  it "should provide a class method to create success values" do
+    validation = Validation.success("yay")
 
-    expect(v.is_success?).to be true
-    expect(v.is_failure?).to be false
+    expect(validation.is_success?).to be true
+    expect(validation.is_failure?).to be false
   end
 
-  it "should provide a factory method for failure values" do
-    v = Validation.failure("boo")
+  it "should provide a class method to create failure values" do
+    validation = Validation.failure("boo")
 
-    expect(v.is_success?).to be false
-    expect(v.is_failure?).to be true
+    expect(validation.is_success?).to be false
+    expect(validation.is_failure?).to be true
 
-    v = Validation.failure("boo", "oh noes")
+    validation = Validation.failure("boo", "oh noes")
 
-    expect(v.is_success?).to be false
-    expect(v.is_failure?).to be true
+    expect(validation.is_success?).to be false
+    expect(validation.is_failure?).to be true
   end
 
   it "should fail when factory methods are called with invalid parameters" do
@@ -37,28 +37,28 @@ RSpec.describe Validation do
 
   it "should retrieve success value from success" do
     value = "yay"
-    v = Validation.success(value)
-    retrieved_value = v.get_or_else(lambda { fail "shouldn't need to call this" })
+    validation = Validation.success(value)
+    retrieved_value = validation.get_or_else(lambda { fail "shouldn't need to call this" })
     expect(retrieved_value).to be value
   end
 
   it "should retrieve default value from failure" do
     default_value = "foo"
-    v = Validation.failure("boo")
-    retrieved_value = v.get_or_else(lambda { default_value })
+    validation = Validation.failure("boo")
+    retrieved_value = validation.get_or_else(lambda { default_value })
     expect(retrieved_value).to be default_value
   end
 
   it "should retrieve self from success validation" do
-    v = Validation.success("yay")
-    retrieved_validation = v.or_else(lambda { fail "shouldn't need to call this" })
-    expect(retrieved_validation).to be v
+    validation = Validation.success("yay")
+    retrieved_validation = validation.or_else(lambda { fail "shouldn't need to call this" })
+    expect(retrieved_validation).to be validation
   end
 
   it "should retrieve default validation from failure validation" do
     default_validation = Validation.success("foo")
-    v = Validation.failure("boo")
-    retrieved_validation = v.or_else(lambda { default_validation })
+    validation = Validation.failure("boo")
+    retrieved_validation = validation.or_else(lambda { default_validation })
     expect(retrieved_validation).to be default_validation
   end
 end
