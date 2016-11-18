@@ -12,6 +12,7 @@ You'll need a Ruby development environment, probably based on `rbenv` and `bundl
 The main code is under `lib`, while tests are under `spec`.
 
 You can run the tests with `bundle exec rspec`.
+`.ruby-version` is provided but the actual version you use shouldn't really matter.
 
 Implement the missing pieces of `validation.rb` to make the tests pass.
 
