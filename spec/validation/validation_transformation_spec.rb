@@ -46,4 +46,12 @@ RSpec.describe Validation do
 
     expect(not_transformed).to be_failure_of("boo")
   end
+
+  it "should be able to contain a list as a success value" do
+    expect(Validation.success(["yay"])).to be_success_of(["yay"])
+  end
+
+  it "should be able to contain a list as an error value" do
+    expect(Validation.failure("boo", ["oh noes"])).to be_failure_of("boo", ["oh noes"])
+  end
 end
