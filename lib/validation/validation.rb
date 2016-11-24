@@ -52,10 +52,23 @@ class Validation
     raise "not implemented"
   end
 
-  # In general, fold on any structure takes functions which mirror the various ways that the structure can be created.
-  # In the case of Validation, there are two options, success() and failure().
+  # Fold is a function used to transform data structures.
+  # It's quite an abstract concept, found in many different languages.
+  # Folds can be implemented for lots of different data structures.
   #
-  # Our fold() therefore takes two functions, and runs exactly one of them.
+  # In general, a fold on some algebraic data type takes functions which mirror the various ways the type can be created.
+  # In the case of Validation, there are two options, success() and failure().
+  # A fold produces a value which is in some way the result of combining the contents of the data structure.
+  # In the case of Validation, there is no recursive structure to the data type, so there is nothing to combine - we just transform the value we find.
+  #
+  # You might be most familiar with folds in the shape of inject() on Ruby's Enumerable.
+  #
+  # Further reading:
+  # https://wiki.haskell.org/Fold
+  # https://en.wikipedia.org/wiki/Algebraic_data_type
+  # https://ruby-doc.org/core-2.3.3/Enumerable.html#method-i-inject
+  #
+  # Our fold() takes two functions, and runs exactly one of them.
   # If this Validation represents failure, it runs the if_failure function, passing the error values as an array.
   # If this Validation represents success, it runs the if_success function, passing the success value.
   # In either case, fold() returns the result of the function called.

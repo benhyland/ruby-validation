@@ -18,12 +18,6 @@ RSpec.describe Validation do
     expect(value_validation.apply(Validation.failure("oh noes", "not again"))).to be_failure_of("boo", "oh noes", "not again")
   end
 
-#
-# Before moving on, examine your implementation of apply(). What does it achieve?
-# Can you implement Validation.apply() in a single function, without overriding it for success or failure? If not, consider refactoring until you can.
-# You will probably need some confidence with apply() to use it in the remaining tasks, and performing this refactoring might make its structure clearer.
-#
-
   it "should sequence list of success validations" do
     validations = NonEmptyList.new(Validation.success("a"), Validation.success("b"), Validation.success("c"))
     sequenced = Validation.sequence(validations)
