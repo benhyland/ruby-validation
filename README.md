@@ -23,7 +23,7 @@ It is probably best to address the tests in the order they appear in each suite 
 - validation_applicative_spec
 
 Pay close attention to the api comments, especially if you are unsure what you need to do.
-The motivation for some of the api may become only be apparent in later tasks.
+The motivation for some of the api may only be apparent in later tasks.
 
 If you prefer to change the suggested api to be more suited to your preferences, please go ahead!
 But try to preserve the restrictions defined by the tests, as well as the functionality.
